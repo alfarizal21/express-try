@@ -1,0 +1,8 @@
+model roleHasPermissions {
+    id String @id @default(uuid()) @db.Uuid
+    role Role @relation(fields: [roleId], references: [id])
+    permission Permission @relation(fields: [permissionId], references: [id])
+    roleId String @db.Uuid
+    permissionId String @db.Uuid
+    assignedAt DateTime @default(now())
+}

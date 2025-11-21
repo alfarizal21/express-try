@@ -1,0 +1,60 @@
+model Permission {
+  id        String               @id @default(uuid()) @db.Uuid
+  name      String               @unique @db.VarChar(100)
+  role      roleHasPermissions[]
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+}
+
+model Role {
+  id                 String               @id @default(uuid()) @db.Uuid
+  name               String               @unique @db.VarChar(50)
+  user               userHasRoles[]
+  roleHasPermissions roleHasPermissions[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+}
+
+model roleHasPermissions {
+  id           String     @id @default(uuid()) @db.Uuid
+  role         Role       @relation(fields: [roleId], references: [id])
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  roleId       String     @db.Uuid
+  permissionId String     @db.Uuid
+  assignedAt   DateTime   @default(now())
+}
+
+model User {
+  id        String         @id @default(uuid()) @db.Uuid
+  name      String         @db.VarChar(100)
+  email     String         @unique @db.VarChar(150)
+  password  String         @db.VarChar(255)
+  role      userHasRoles[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model userHasRoles {
+  id         String   @id @default(uuid()) @db.Uuid
+  user       User     @relation(fields: [userId], references: [id])
+  role       Role     @relation(fields: [roleId], references: [id])
+  userId     String   @db.Uuid
+  roleId     String   @db.Uuid
+  assignedAt DateTime @default(now())
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Test {
+  id    Int    @id @default(autoincrement())
+  name  String
+  value String
+}

@@ -1,0 +1,8 @@
+model Role {
+    id String @id @default(uuid()) @db.Uuid
+    name String @unique @db.VarChar(50)
+    user userHasRoles[]
+    roleHasPermissions roleHasPermissions[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
