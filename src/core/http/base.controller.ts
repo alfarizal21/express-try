@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { ApiResponse } from "./api-response";
+import { ApiResponse } from "../../core/http/types";
 import { SuccessResponse } from "../../shared/response/success-response";
 
 export class BaseController {

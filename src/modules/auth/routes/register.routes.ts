@@ -1,12 +1,9 @@
-import { Router } from "express";
-import { RegisterController } from "../controllers/register.controller";
-import { RegisterRequest } from "../request/register.request";
-import { validateRequest } from "../middleware/validate.request";
+import { defineRoutes } from "../../../core/http/define-route";
+import RegisterController from "../controllers/register.controller";
 
-const router = Router();
-const controller = new RegisterController();
+export const RegisterRoutes = defineRoutes([
+    { method: "post", path: "/register", handler: RegisterController.register },
+])
 
-router.post("/", RegisterRequest, validateRequest, controller.register.bind(controller));
 
-export default router;
 

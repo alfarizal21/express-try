@@ -1,11 +1,6 @@
-import { Router } from "express";
-import { LoginController } from "../controllers/login.controller";
-import { LoginRequest } from "../request/login.request";
-import { validateRequest } from "../middleware/validate.request";
+import { defineRoutes } from "../../../core/http/define-route";
+import  LoginController  from "../controllers/login.controller";
 
-const router = Router();
-const controller = new LoginController();
-
-router.post("/", LoginRequest, validateRequest, controller.login.bind(controller));
-
-export default router;
+export const LoginRoutes = defineRoutes([
+  { method: "post", path: "/login", handler: LoginController.login },
+]);

@@ -1,16 +1,24 @@
 import { Request, Response, NextFunction } from "express";
-import { RegisterService } from "../service/register.service";
+import { Handler } from "../../../core/http/types";
 import { BaseController } from "../../../core/http/base.controller";
+import RegisterService from "../service/register.service";
 
-export class RegisterController extends BaseController {
-  private service = new RegisterService();
+class RegisterController extends BaseController {
+    private registerService: RegisterService;
 
-  async register(req: Request, res: Response, next: NextFunction) {
-    try {
-      const result = await this.service.register(req.body);
-      return this.created(res, result, "User registered successfully");
-    } catch (err) {
-      next(err);
+    constructor() {
+      super();
+      this.registerService = new RegisterService();
     }
-  }
+
+    register: Handler<any> = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const result = await this.registerService.register(req.body);
+            return this.created(res, result, "User registered successfully");
+        } catch (err) {
+            next(err);
+        }
+    }
 }
+
+export default new RegisterController();

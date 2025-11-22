@@ -1,13 +1,9 @@
-import { Router } from "express";
-import loginRoutes from "./routes/login.routes";
-import registerRoutes from "./routes/register.routes";
+import { LoginRoutes } from "./routes/login.routes";
+import { AppModule } from "../../core/module";
+import { RegisterRoutes } from "./routes/register.routes";
 
-const router = Router();
-
-router.use("/login", loginRoutes);
-router.use("/register", registerRoutes);
-
-export default {
+export const authModule = new AppModule({
+  name: "auth",
   prefix: "/auth",
-  router
-};
+  routes: LoginRoutes.concat(RegisterRoutes),
+});

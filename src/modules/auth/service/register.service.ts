@@ -2,26 +2,27 @@ import bcrypt from "bcrypt";
 import { prisma } from "../../../core/prisma";
 import HttpException from "../../../shared/errors/htttp-exceptions";
 
-export class RegisterService {
+class RegisterService {
   async register(data: { name: string; email: string; password: string }) {
-    const exists = await (prisma as any).user.findUnique({
+    const existingUser = await (prisma as any).user.findUnique({
       where: { email: data.email }
     });
 
-    if (exists) {
-      throw new HttpException(400, "Email already registered");
+    if (existingUser) {
+      throw new HttpException(409, "Email already in use");
     }
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    const hashed = await bcrypt.hash(data.password, 10);
-
-    const user = await (prisma as any).user.create({
+    const newUser = await (prisma as any).user.create({
       data: {
         name: data.name,
         email: data.email,
-        password: hashed,
-      },
+        password: hashedPassword
+      }
     });
 
-    return user;
+    return { id: newUser.id, name: newUser.name, email: newUser.email };
   }
 }
+
+export default RegisterService;
