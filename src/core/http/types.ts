@@ -33,7 +33,15 @@ export type HttpMethod = "get" | "post" | "put" | "delete" | "patch";
 export interface RouteDefinition {
   method: HttpMethod;
   path: string;
-  handler: RequestHandler;
+  handler: RequestHandler | RequestHandler[]; 
 }
+
+// export interface RouteDefinition {
+//   method: HttpMethod;
+//   path: string;
+//   handler: RequestHandler;
+// }
+
+
 
     

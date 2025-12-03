@@ -5,6 +5,7 @@ interface AppError extends Error {
   status?: number;
   fileName?: string;
   lineNumber?: number;
+  errors?: any;
 }
 
 export default function ErrorMiddleware(
@@ -15,17 +16,31 @@ export default function ErrorMiddleware(
 ) {
   const status = err.status || 500;
 
-  const response = ErrorResponse(
-    err.message || "Internal Server Error",
-    status.toString(),
-    [
+  const errorDetails = err.errors || [
       {
         message: err.message,
         file: err.fileName ?? "unknown",
         line: err.lineNumber ?? 0
       }
-    ]
+  ];
+
+  const response = ErrorResponse(
+    err.message || "Internal Server Error",
+    status.toString(),
+    errorDetails 
   );
+
+  // const response = ErrorResponse(
+  //   err.message || "Internal Server Error",
+  //   status.toString(),
+  //   [
+  //     {
+  //       message: err.message,
+  //       file: err.fileName ?? "unknown",
+  //       line: err.lineNumber ?? 0
+  //     }
+  //   ]
+  // );
 
   res.status(status).json(response);
 }

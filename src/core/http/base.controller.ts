@@ -10,4 +10,12 @@ export class BaseController {
   created<T>(res: Response<ApiResponse<T>>, data: T, message = "Created") {
     return res.status(201).json(SuccessResponse<T>(message, "201", data));
   }
+
+  okMeta(res: Response, message = "Success") {
+    return res.json(SuccessResponse(message, "200"));
+  }
+
+  createdMeta(res: Response, message = "Created") {
+    return res.status(201).json(SuccessResponse(message, "201"));
+  }
 }

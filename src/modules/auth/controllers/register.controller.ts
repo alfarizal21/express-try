@@ -13,12 +13,22 @@ class RegisterController extends BaseController {
 
     register: Handler<any> = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const result = await this.registerService.register(req.body);
-            return this.created(res, result, "User registered successfully");
+            await this.registerService.register(req.body);
+            
+            return this.createdMeta(res, "User registered successfully");
         } catch (err) {
             next(err);
         }
     }
+
+        // register: Handler<any> = async (req: Request, res: Response, next: NextFunction) => {
+    //     try {
+    //         const result = await this.registerService.register(req.body);
+    //         return this.created(res, result, "User registered successfully");
+    //     } catch (err) {
+    //         next(err);
+    //     }
+    // }
 }
 
 export default new RegisterController();

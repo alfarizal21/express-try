@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { BaseController } from "../../../core/http/base.controller";
 import { Handler } from "../../../core/http/types";
 import  LoginService  from "../service/login.service";
+import { ca } from "zod/v4/locales";
 
 class LoginController extends BaseController {
     private loginService: LoginService;
@@ -13,12 +14,22 @@ class LoginController extends BaseController {
 
     login: Handler<any> = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const result = await this.loginService.login(req.body);
-            return this.ok(res, result, "Login success");
+            await this.loginService.login(req.body);
+            
+            return this.okMeta(res, "Login success");
         } catch (err) {
             next(err);
         }
     }
+
+    // login: Handler<any> = async (req: Request, res: Response, next: NextFunction) => {
+    //     try {
+    //         const result = await this.loginService.login(req.body);
+    //         return this.ok(res, result, "Login success");
+    //     } catch (err) {
+    //         next(err);
+    //     }
+    // }
 }
 
 export default new LoginController();
